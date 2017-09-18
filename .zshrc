@@ -49,11 +49,11 @@ HYPHEN_INSENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(brew bower gem node npm osx web-search)
+plugins=(brew bower gem node npm nyan osx web-search)
 
 # User configuration
 
-export PATH="/Users/mao/.bin:/Users/mao/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$HOME/.bin:$HOME/.composer/vendor/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -105,7 +105,7 @@ alias source.zsh="source ~/.zshrc"
 ################################################
 
 # github api token for homebrew
-# export HOMEBREW_GITHUB_API_TOKEN=my token ^_^
+# export HOMEBREW_GITHUB_API_TOKEN=
 
 # homebrew bottle 源, 伟大的七牛去提供服务
 # export HOMEBREW_BOTTLE_DOMAIN=http://7xkcej.dl1.z0.glb.clouddn.com
@@ -117,7 +117,7 @@ alias source.zsh="source ~/.zshrc"
 #
 ################################################
 
-# vim 
+# vim
 alias vi.config="vi ~/.vim_runtime/my_configs.vim"
 alias vim.config="vi ~/.vim_runtime/my_configs.vim"
 
@@ -140,25 +140,32 @@ alias syst="istats"
 ################################################
 
 # hosts
-alias hosts.config="sudo vi /etc/hosts" 
+alias hosts.config="sudo vi /etc/hosts"
 
+# alias php.config="sudo vi /usr/local/etc/php/5.6/php.ini"
 alias php.config="sudo vi /etc/php.ini"
+# alias php.config="sudo vi /usr/local/etc/php/7.0/php.ini"
 
 # apache2
 alias apache.config="sudo vi /etc/apache2/httpd.conf"
-# alias apache.config="sudo vi /usr/local/etc/apache2/2.4/httpd.conf"
 alias vhosts.config="sudo vi /etc/apache2/extra/httpd-vhosts.conf"
-# alias vhosts.config="sudo vi /usr/local/etc/apache2/2.4/extra/httpd-vhosts.conf"
 alias apache.start="sudo launchctl load -w /System/Library/LaunchDaemons/org.apache.httpd.plist"
 alias apache.stop="sudo launchctl unload -w /System/Library/LaunchDaemons/org.apache.httpd.plist"
 alias apache.restart="apache.stop && apache.start"
 
 # mysql
 alias mysql.config="sudo vi /etc/my.conf"
-alias mysql.restart="mysql.server restart"
-alias mysql.start="mysql.server start"
-alias mysql.stop="mysql.server stop"
+alias mysql.restart="brew services restart mysql"
+alias mysql.start="brew services start mysql"
+alias mysql.stop="brew services stop mysql"
 alias mysql.status="mysql.server status"
+
+# nginx
+alias ng.test='sudo nginx -t'
+alias ng.start='sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
+alias ng.stop='sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
+alias ng.restart='ng.stop && ng.start'
+alias ngvh.config='cd /usr/local/etc/nginx/servers'
 
 # php-fpm
 alias fpm.start="launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist"
@@ -174,7 +181,15 @@ alias fpm.restart='fpm.stop && fpm.start'
 
 # git 最常用操作别名
 alias gs="git status"
+alias gtags="git for-each-ref --sort=taggerdate --format '%(refname) %(taggerdate)' refs/tags"
+
+# better git branch graph in terminal
+# ref: http://stackoverflow.com/questions/1838873/visualizing-branch-topology-in-git/34467298#34467298
 alias glg="git log"
+alias glg1="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+alias glg2="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+alias glg3="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)' --all"
+
 
 ################################################
 #
@@ -184,7 +199,7 @@ alias glg="git log"
 
 # android sdk
 export ANDROID_HOME=~/Library/Android/sdk
-export PATH=${PATH}:${ANDROID_HOME}/tools:~/Library/Android/sdk/platform-tools
+export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:~/Library/Android/sdk/platform-tools
 
 
 ################################################
@@ -200,17 +215,17 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # display a slash / after directores
 alias ls="ls -FG"
 
-# quick jump to often used directories 
+# quick jump to often used directories
 # http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 export MARKPATH=$HOME/.marks
-function jump { 
+function jump {
     cd -P "$MARKPATH/$1" 2>/dev/null || echo "No such mark: $1"
     pwd
 }
-function mark { 
+function mark {
     mkdir -p "$MARKPATH"; ln -s "$(pwd)" "$MARKPATH/$1"
 }
-function unmark { 
+function unmark {
     rm -i "$MARKPATH/$1"
 }
 function marks {
@@ -241,15 +256,43 @@ alias cdd='jump'
 # sourcetree alias
 alias st='open -a SourceTree'
 
-# sublime alias
-# alias subl='/Applications/SublimeText.app/Contents/SharedSupport/bin/subl'
 
-# atom alias
-# alias atom='/Applications/Atom.app/Contents/MacOS/Atom'
+#################################################
+#
+# nvm
+#
+################################################
 
-# vscode alias
-# alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
+#export NVM_DIR="$HOME/.nvm"
+#  . "/usr/local/opt/nvm/nvm.sh"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+###############################################
+#
+# android
+#
+################################################
+
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home"
+
+# sign, crosswalk
+alias ion.sign.a='jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keystores/bluestoneapp-release-key.keystore "platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk" "bluestoneapp" -storepass stone123 -keypass stone123'
+
+# align, crosswalk
+alias ion.align.a='~/Library/Android/sdk/build-tools/26.0.0/zipalign -v 4 "platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk" "genecast-release.apk"'
+
+alias ion.sa="rm -f genecast-release.apk && ion.sign.a && ion.align.a"
+
+# sign, default, without crosswalk
+alias ion.sign.a.def='jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keystores/bluestoneapp-release-key.keystore "platforms/android/build/outputs/apk/android-release-unsigned.apk" "bluestoneapp" -storepass stone123 -keypass stone123'
+
+# align, crosswalk
+alias ion.align.a.def='~/Library/Android/sdk/build-tools/26.0.0/zipalign -v 4 "platforms/android/build/outputs/apk/android-release-unsigned.apk" "genecast-release.apk"'
+
+alias ion.sa.def="rm -f genecast-release.apk && ion.sign.a.def && ion.align.a.def"
+
+# nvm
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/usr/local/opt/node@6/bin:$PATH"
