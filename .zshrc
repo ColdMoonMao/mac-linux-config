@@ -49,7 +49,7 @@ HYPHEN_INSENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(brew bower gem node npm nyan osx web-search)
+plugins=(brew bower gem node npm nyan osx web-search zsh-autosuggestions)
 
 # User configuration
 
@@ -143,8 +143,8 @@ alias syst="istats"
 alias hosts.config="sudo vi /etc/hosts"
 
 # alias php.config="sudo vi /usr/local/etc/php/5.6/php.ini"
-alias php.config="sudo vi /etc/php.ini"
-# alias php.config="sudo vi /usr/local/etc/php/7.0/php.ini"
+# alias php.config="sudo vi /etc/php.ini"
+# alias php.config="sudo vi /usr/local/etc/php/7.1/php.ini"
 
 # apache2
 alias apache.config="sudo vi /etc/apache2/httpd.conf"
@@ -161,16 +161,36 @@ alias mysql.stop="brew services stop mysql"
 alias mysql.status="mysql.server status"
 
 # nginx
-alias ng.test='sudo nginx -t'
-alias ng.start='sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
-alias ng.stop='sudo launchctl unload -w /Library/LaunchDaemons/homebrew.mxcl.nginx.plist'
-alias ng.restart='ng.stop && ng.start'
-alias ngvh.config='cd /usr/local/etc/nginx/servers'
+# alias ng.config='vi /usr/local/etc/nginx/nginx.conf'
+# alias ng.dir='subl /usr/local/etc/nginx'
+# alias ng.test='sudo nginx -t'
+# alias ng.start='sudo nginx'
+# alias ng.stop='sudo nginx -s stop'
+# alias ng.restart='sudo nginx -s reload'
+# alias nginx.log="cd /usr/local/var/log"
 
-# php-fpm
-alias fpm.start="launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist"
-alias fpm.stop="launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.php56.plist"
-alias fpm.restart='fpm.stop && fpm.start'
+# nginx homebrew way
+alias ng.config='vi /usr/local/etc/nginx/nginx.conf'
+alias ng.dir='subl /usr/local/etc/nginx'
+alias ng.test='sudo nginx -t'
+alias ng.start='sudo brew services start nginx'
+alias ng.stop='sudo brew services stop nginx'
+alias ng.restart='sudo brew services restart nginx'
+alias nginx.log="cd /usr/local/var/log"
+
+# php 7.1
+# alias php.config="sudo vi /usr/local/etc/php/7.1/php.ini"
+# alias fpm.dir="subl /usr/local/etc/php/7.1"
+# alias fpm.start="launchctl load -w ~/Library/LaunchAgents/homebrew.mxcl.php71.plist"
+# alias fpm.stop="launchctl unload -w ~/Library/LaunchAgents/homebrew.mxcl.php71.plist"
+# alias fpm.restart='fpm.stop && fpm.start'
+
+# nginx homebrew way
+alias php.config="sudo vi /usr/local/etc/php/7.1/php.ini"
+alias fpm.dir="subl /usr/local/etc/php/7.1"
+alias fpm.start="brew services start homebrew/php/php71"
+alias fpm.stop="brew services stop homebrew/php/php71"
+alias fpm.restart='brew services restart homebrew/php/php71'
 
 
 ################################################
@@ -275,24 +295,45 @@ alias st='open -a SourceTree'
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_112.jdk/Contents/Home"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home"
 
-# sign, crosswalk
+# sign,arm, crosswalk
 alias ion.sign.a='jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keystores/bluestoneapp-release-key.keystore "platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk" "bluestoneapp" -storepass stone123 -keypass stone123'
 
-# align, crosswalk
+# align,arm, crosswalk
 alias ion.align.a='~/Library/Android/sdk/build-tools/26.0.0/zipalign -v 4 "platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk" "genecast-release.apk"'
 
 alias ion.sa="rm -f genecast-release.apk && ion.sign.a && ion.align.a"
 
-# sign, default, without crosswalk
+# sign,x86 , crosswalk
+alias ion.sign.a.x86='jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keystores/bluestoneapp-release-key.keystore "platforms/android/build/outputs/apk/android-x86-release-unsigned.apk" "bluestoneapp" -storepass stone123 -keypass stone123'
+
+# align,x86, crosswalk
+alias ion.align.a.x86='~/Library/Android/sdk/build-tools/26.0.0/zipalign -v 4 "platforms/android/build/outputs/apk/android-x86-release-unsigned.apk" "genecast-release.apk"'
+
+alias ion.sa.x86="rm -f genecast-release.apk && ion.sign.a.x86 && ion.align.a.x86"
+
+
+# sign,arm , without crosswalk
 alias ion.sign.a.def='jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/keystores/bluestoneapp-release-key.keystore "platforms/android/build/outputs/apk/android-release-unsigned.apk" "bluestoneapp" -storepass stone123 -keypass stone123'
 
-# align, crosswalk
+# align,arm, without crosswalk
 alias ion.align.a.def='~/Library/Android/sdk/build-tools/26.0.0/zipalign -v 4 "platforms/android/build/outputs/apk/android-release-unsigned.apk" "genecast-release.apk"'
 
 alias ion.sa.def="rm -f genecast-release.apk && ion.sign.a.def && ion.align.a.def"
 
+
+
+# npm 
+# custom npm source
+
+alias mnpm="npm --registry=https://registry.npm.taobao.org \
+--cache=$HOME/.npm/.cache/cnpm \
+--disturl=https://npm.taobao.org/dist \
+--userconfig=$HOME/.cnpmrc"
+
+
+
 # nvm
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="/usr/local/opt/node@6/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export PATH="/usr/local/opt/node@6/bin:$PATH"
