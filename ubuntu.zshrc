@@ -1,8 +1,8 @@
-  # If you come from bash you might have to change your $PATH.
+# If you come from bash you might have to change your $PATH.
   # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
   # Path to your oh-my-zsh installation.
-  export ZSH=/home/ubuntu/.oh-my-zsh
+  export ZSH=/home/mao/.oh-my-zsh
 
   # Set name of the theme to load. Optionally, if you set this to "random"
   # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -59,7 +59,7 @@
   # Example format: plugins=(rails git textmate ruby lighthouse)
   # Add wisely, as too many plugins slow down shell startup.
   plugins=(
-  git zsh-autosuggestions
+  git zsh-autosuggestions zsh-syntax-highlighting 
   )
 
   source $ZSH/oh-my-zsh.sh
@@ -141,6 +141,16 @@
   # zsh config
   alias zsh.config="vi ~/.zshrc"
   alias source.zsh="source ~/.zshrc"
+
+  ################################################
+  #
+  # android
+  #
+  ################################################
+
+  # android sdk
+  export ANDROID_HOME=/home/mao/Android/sdk
+  export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
 
 
   ################################################
