@@ -219,7 +219,7 @@ alias glg3="git log --graph --abbrev-commit --decorate --format=format:'%C(bold 
 
 # android sdk
 export ANDROID_HOME=~/Library/Android/sdk
-export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:~/Library/Android/sdk/platform-tools
+export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/sdk/platform-tools
 
 
 ################################################
