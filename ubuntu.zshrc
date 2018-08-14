@@ -181,3 +181,6 @@
   alias nginx.start="sudo service nginx start"
   alias nginx.stop="sudo service nginx stop"
   alias nginx.restart="sudo service nginx restart"
+  
+  # tencent cloud server
+  alias loginmyserver="ssh ubuntu@118.25.46.49"
